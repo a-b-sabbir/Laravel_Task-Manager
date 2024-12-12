@@ -25,21 +25,20 @@ class TaskController extends Controller implements HasMiddleware
 
         // Created a tasks method in User model to make it authenticated
         $tasks = $request->user()->tasks()->create($validatedData);
-        $response = [];
-        $response['title'] = $tasks->title;
-        $response['description'] = $tasks->description;
-        $response['status'] = $tasks->status;
 
         return response()->json([
             'status' => true,
             'message' => 'done',
-            'data' => $response
+            'data' => $tasks
         ]);
     }
 
     public function index(Request $request)
     {
-        $tasks = Task::paginate(5);
+        // Fetch tasks for the logged-in user only
+        $tasks = $request->user()->tasks()->paginate(5);
+        //with the following code, all the tasks will be shown
+        // $tasks = Task::paginate(5);
 
         return response()->json([
             'status' => true,
@@ -50,7 +49,15 @@ class TaskController extends Controller implements HasMiddleware
 
     public function show(Request $request, $id)
     {
-        $task = Task::find($id);
+        $task = $request->user()->tasks()->find($id);
+
+        if (!$task) {
+            return response()->json([
+                'status' => false,
+                'message' => 'The task not found',
+                'data' => $task
+            ]);
+        }
 
         return response()->json([
             'status' => true,
@@ -74,7 +81,15 @@ class TaskController extends Controller implements HasMiddleware
             ]);
         }
 
-        $task = Task::find($id);
+        $task = $request->user()->tasks()->find($id);
+
+        if (!$task) {
+            return response()->json([
+                'status' => false,
+                'message' => 'The task not found',
+
+            ]);
+        }
         $task->title = $request->title;
         $task->description = $request->description;
         $task->status = $request->status;
@@ -85,9 +100,9 @@ class TaskController extends Controller implements HasMiddleware
         ]);
     }
 
-    public function destroy($id)
+    public function destroy(Request $request, $id)
     {
-        $task = Task::find($id);
+        $task = $request->user()->tasks()->find($id);
         if (!$task) {
             return response()->json([
                 'status' => false,

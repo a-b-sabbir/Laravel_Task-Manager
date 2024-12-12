@@ -48,6 +48,7 @@ class User extends Authenticatable
     }
 
     //added by me
+    //This tells Laravel that each user can have many tasks.
     public function tasks()
     {
         return $this->hasMany(Task::class);

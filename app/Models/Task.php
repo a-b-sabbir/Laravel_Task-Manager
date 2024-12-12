@@ -11,4 +11,10 @@ class Task extends Model
         'description',
         'status'
     ];
+
+    // Added by me
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
 }
