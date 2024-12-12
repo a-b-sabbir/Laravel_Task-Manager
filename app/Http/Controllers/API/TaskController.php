@@ -37,10 +37,28 @@ class TaskController extends Controller implements HasMiddleware
     public function index(Request $request)
     {
         // Fetch tasks for the logged-in user only
-        $tasks = $request->user()->tasks()->paginate(5);
+        $query = $request->user()->tasks(); //just an instance
         //with the following code, all the tasks will be shown
         // $tasks = Task::paginate(5);
 
+        // Filter by status if provided
+        if ($request->has('status')) {
+            $query->where('status', $request->status);
+        }
+
+        if ($request->has('priority')) {
+            $query->where('priority', $request->priority);
+        }
+
+
+        $tasks = $query->paginate(5);
+
+        if ($tasks->isEmpty()) {
+            return response()->json([
+                'status' => false,
+                'message' => 'Result not found'
+            ]);
+        }
         return response()->json([
             'status' => true,
             'message' => 'Data shown',
@@ -96,6 +114,7 @@ class TaskController extends Controller implements HasMiddleware
         $task->description = $request->description;
         $task->status = $request->status;
         $task->priority = $request->priority;
+
         return response()->json([
             'status' => true,
             'message' => 'Task updated',
