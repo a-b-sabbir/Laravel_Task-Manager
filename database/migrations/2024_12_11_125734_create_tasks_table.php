@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string('title');
             $table->text('description');
-            $table->enum('status', ['pending', 'in-progress', 'completed'])->default('pending');
+            $table->enum('status', ['Pending', 'In-Progress', 'Completed'])->default('pending');
             // Create a user_id column in the current table (e.g., tasks table).
             // This column will store the id of the user who owns the task.
             // It is defined as unsignedBigInteger because user ids are positive large numbers.
