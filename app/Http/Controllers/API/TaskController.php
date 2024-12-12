@@ -20,7 +20,8 @@ class TaskController extends Controller implements HasMiddleware
         $validatedData = $request->validate([
             'title' => 'required|string|max:255',
             'description' => 'required|string',
-            'status' => 'required|in:Pending,In-progress,Completed'
+            'status' => 'required|in:Pending,In-progress,Completed',
+            'priority' => 'required|in:Low,Medium,High'
         ]);
 
         // Created a tasks method in User model to make it authenticated
@@ -71,7 +72,8 @@ class TaskController extends Controller implements HasMiddleware
         $validatedData = Validator::make($request->all(), [
             'title' => 'required',
             'description' => 'required',
-            'status' => 'required|in:Pending, In-Progress, Completed'
+            'status' => 'required|in:Pending, In-Progress, Completed',
+            'priority' => 'required|in:Low,Medium,High'
         ]);
         if ($validatedData->fails()) {
             return response()->json([
@@ -93,6 +95,7 @@ class TaskController extends Controller implements HasMiddleware
         $task->title = $request->title;
         $task->description = $request->description;
         $task->status = $request->status;
+        $task->priority = $request->priority;
         return response()->json([
             'status' => true,
             'message' => 'Task updated',
