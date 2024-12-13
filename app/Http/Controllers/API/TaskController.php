@@ -89,11 +89,11 @@ class TaskController extends Controller implements HasMiddleware
     public function update(Request $request, $id)
     {
         $validatedData = Validator::make($request->all(), [
-            'title' => 'required',
-            'description' => 'required',
-            'status' => 'required|in:Pending, In-Progress, Completed',
-            'priority' => 'required|in:Low,Medium,High',
-            'due_date' => 'required|date|after:today'
+            'title' => 'sometimes',
+            'description' => 'sometimes',
+            'status' => 'sometimes|in:Pending, In-Progress, Completed',
+            'priority' => 'sometimes|in:Low,Medium,High',
+            'due_date' => 'sometimes|date|after:today'
         ]);
         if ($validatedData->fails()) {
             return response()->json([
