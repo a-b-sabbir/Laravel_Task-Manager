@@ -21,7 +21,8 @@ class TaskController extends Controller implements HasMiddleware
             'title' => 'required|string|max:255',
             'description' => 'required|string',
             'status' => 'required|in:Pending,In-progress,Completed',
-            'priority' => 'required|in:Low,Medium,High'
+            'priority' => 'required|in:Low,Medium,High',
+            'due_date' => 'required|date|after:today'
         ]);
 
         // Created a tasks method in User model to make it authenticated
@@ -46,10 +47,10 @@ class TaskController extends Controller implements HasMiddleware
             $query->where('status', $request->status);
         }
 
+        // Filter by priority if provided
         if ($request->has('priority')) {
             $query->where('priority', $request->priority);
         }
-
 
         $tasks = $query->paginate(5);
 
@@ -91,7 +92,8 @@ class TaskController extends Controller implements HasMiddleware
             'title' => 'required',
             'description' => 'required',
             'status' => 'required|in:Pending, In-Progress, Completed',
-            'priority' => 'required|in:Low,Medium,High'
+            'priority' => 'required|in:Low,Medium,High',
+            'due_date' => 'required|date|after:today'
         ]);
         if ($validatedData->fails()) {
             return response()->json([
@@ -114,6 +116,7 @@ class TaskController extends Controller implements HasMiddleware
         $task->description = $request->description;
         $task->status = $request->status;
         $task->priority = $request->priority;
+        $task->due_date = $request->due_date;
 
         return response()->json([
             'status' => true,

@@ -10,7 +10,8 @@ class Task extends Model
         'title',
         'description',
         'status',
-        'priority'
+        'priority',
+        'due_date'
     ];
 
     // Added by me
