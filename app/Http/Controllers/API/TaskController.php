@@ -37,6 +37,20 @@ class TaskController extends Controller implements HasMiddleware
 
     public function index(Request $request)
     {
+
+
+        // Define allowed filter keys
+        $allowedFilters = ['status', 'priority'];
+
+        // Check if any invalid filter is provided
+        foreach ($request->all() as $key => $value) {
+            if (!in_array($key, $allowedFilters)) {
+                return response()->json([
+                    'status' => false,
+                    'message' => "Invalid filter '$key' provided. Supported filters are: status, priority, due_date."
+                ], 400); // Bad Request (400)
+            }
+        }
         // Fetch tasks for the logged-in user only
         $query = $request->user()->tasks(); //just an instance
         //with the following code, all the tasks will be shown
