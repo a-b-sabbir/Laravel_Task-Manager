@@ -15,6 +15,7 @@ class TaskController extends Controller implements HasMiddleware
     {
         return [new Middleware('auth:api')];
     }
+    
     public function store(Request $request)
     {
         $validatedData = $request->validate([
