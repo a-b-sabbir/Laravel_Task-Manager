@@ -15,7 +15,7 @@ class TaskController extends Controller implements HasMiddleware
     {
         return [new Middleware('auth:api')];
     }
-    
+
     public function store(Request $request)
     {
         $validatedData = $request->validate([
@@ -38,8 +38,6 @@ class TaskController extends Controller implements HasMiddleware
 
     public function index(Request $request)
     {
-
-
         // Define allowed filter keys
         $allowedFilters = ['status', 'priority'];
 

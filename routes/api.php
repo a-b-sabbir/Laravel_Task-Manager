@@ -20,4 +20,6 @@ Route::middleware("auth:api")->group(function () {
 
 
 Route::post('/profile', [ProfileController::class, 'store'])->middleware('auth:api');
-
+Route::get('/profile', [ProfileController::class, 'index'])->middleware('auth:api');
+Route::put('/profile/{id}', [ProfileController::class, 'update'])->middleware('auth:api');
+Route::delete('/profile/{id}', [ProfileController::class, 'delete'])->middleware('auth:api');
